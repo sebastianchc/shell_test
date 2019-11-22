@@ -58,7 +58,7 @@ int main(void)
 	char *argv[256];
 	int i, j;
 
-	buffer = malloc(size);
+	buffer = malloc(sizeof(char) * size);
 	if (!buffer)
 	{
 		perror("Unable to allocate buffer");
@@ -76,23 +76,23 @@ int main(void)
 		child = fork();
 		if (child == -1)
 		{
-			perror("Error:");
+			perror("Error");
 			return (1);
-		}
-		token = strtok(buffer, " \n");
-		j = 0;
-		while (token)
-		{
-			argv[j] = token;
-			token = strtok(NULL, " \n");
-			j++;
 		}
 		if (child == 0)
 		{
-			printf("PID %d & PPID %d\n", getpid(), getppid());
+			token = strtok(buffer, " \n");
+			j = 0;
+			while (token)
+			{
+				argv[j] = token;
+				token = strtok(NULL, " \n");
+				j++;
+			}
+			argv[j] = NULL;
 			if (execve(argv[0], argv, NULL) == -1)
 			{
-				perror("Error:");
+				perror("Error");
 			}
 			exit(0);
 		}

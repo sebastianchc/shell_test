@@ -44,7 +44,7 @@ int _strcmp(char *s1, char *s2)
 int main(void)
 {
 	char *prompt = "#cisfun$ ";
-	char *salida = "exit\n";
+	char *salida = "exit";
 	char *buffer, *token;
 	size_t size = 1024;
 	pid_t child;

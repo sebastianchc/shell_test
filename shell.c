@@ -1,6 +1,17 @@
 #include "simple_shell.h"
 
 /**
+ * singnalhandler - Ignore CTRL + C.
+ *
+ * Return: Nothing.
+ */
+
+void signalhandler()
+{
+	write(1, "\n#cisfun$ ", 10);
+}
+
+/**
  * _strcmp - Function that compares two strings.
  * @s1: String 1.
  * @s2: String 2.
@@ -13,7 +24,7 @@ int _strcmp(char *s1, char *s2)
 	int i;
 
 	i = 0;
-	while (s1[i] != '\n')
+	while (s1[i])
 	{
 		if ((s1[i] > s2[i]) || (s1[i] < s2[i]))
 		{
@@ -21,26 +32,7 @@ int _strcmp(char *s1, char *s2)
 		}
 		i++;
 	}
-	return (-1);
-}
-
-/**
- * _strlen - Returns the length of a string.
- * @s: String.
- *
- * Return: Length of s.
- */
-
-int _strlen(char *s)
-{
-	int i;
-
-	i = 0;
-	while (s[i] != '\n')
-	{
-		i++;
-	}
-	return (i);
+	return (0);
 }
 
 /**
@@ -52,6 +44,7 @@ int _strlen(char *s)
 int main(void)
 {
 	char *prompt = "#cisfun$ ";
+	char *salida = "exit\n";
 	char *buffer, *token;
 	size_t size = 1024;
 	pid_t child;
@@ -66,7 +59,13 @@ int main(void)
 	}
 	do {
 		write(1, prompt, 9);
+		signal(SIGINT, signalhandler);
 		i = getline(&buffer, &size, stdin);
+		if (_strcmp(salida, buffer) == 0)
+		{
+			free(buffer);
+			return (0);
+		}
 		if (i == -1)
 		{
 			write(1, "\n", 1);
